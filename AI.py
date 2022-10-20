@@ -43,7 +43,7 @@ class computerplayer():
         maxpoint = -inf
         for i in self.available(self.board):
             boards = copy.copy(self.board)
-            point = self.minimax(boards, turn, i)
+            point = self.minimax(boards, turn, i,+inf,-inf)
             if spot == i:
                 maxpoint = point
             else:
@@ -52,7 +52,7 @@ class computerplayer():
         return spot
 
     
-    def minimax(self, board,turn, spot):
+    def minimax(self, board,turn, spot,alpha,beta):
         board[spot] = turn
         if self.win(board,turn) == True:
             if turn == self.maxplayer:
@@ -70,13 +70,19 @@ class computerplayer():
             maxpoint = -inf
             for i in self.available(board):
                 newboard = copy.copy(board)
-                point = self.minimax(newboard,turn,i)
+                point = self.minimax(newboard,turn,i,alpha,beta)
                 maxpoint = max(maxpoint,point)
+                alpha = max(alpha,maxpoint)
+                if beta <= alpha:
+                    break
             return maxpoint
         else:
             minpoint = inf
             for i in self.available(board):
                 newboard = copy.copy(board)
-                point = self.minimax(newboard,turn,i)
+                point = self.minimax(newboard,turn,i,alpha,beta)
                 minpoint = min(minpoint,point)
+                beta = min(beta,minpoint)
+                if beta <= alpha:
+                    break
             return minpoint
